@@ -1,7 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+  
+import LoginPage from "./pages/loginpage/loginPage";
+function App(){
+  return (
+    <LoginPage/>
+  );
+}
+export default App;
 
-function App() {
+
+// import logo from './logo.svg';
+// import './App.css';
+
+/*function App() {
   return (
     <div className="App">
       <header className="App-header">
@@ -19,7 +29,5 @@ function App() {
         </a>
       </header>
     </div>
-  );
-}
+  );*/
 
-export default App;
