@@ -34,7 +34,7 @@ function LoginPages() {
           />
         </div>
         <div style={styles.inputContainer}>
-          <label htmlFor="password" style={styles.label}>Contraseña:</label>
+          <label htmlFor="password" style={styles.label}>contraseña:</label>
           <input
             type="password"
             id="password"
