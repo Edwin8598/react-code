@@ -1,15 +1,30 @@
-  
-import LoginPage from "./pages/loginpage/loginPage";
-function App(){
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Registerpage from "./pages/Registerpage/Registerpage";
+import Forgotpasswordpage from "./pages/Forgotpasswordpage/Forgotpasswordpage";
+import LoginPage from "./pages/LoginPages/LoginPages";
+import Dashboardpage from "./pages/Dashboardpage/Dashboardpage";
+
+function App() {
   return (
-    <LoginPage/>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/register" element={<Registerpage />} />
+        <Route path="/forgot" element={<Forgotpasswordpage />} />
+        <Route path="/dashboard" element={<Dashboardpage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
+
 export default App;
 
 
+
+
 // import logo from './logo.svg';
-// import './App.css';
+//import './App.css';
 
 /*function App() {
   return (
