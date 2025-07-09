@@ -87,6 +87,9 @@ function LoginPage() {
         <div style={styles.links}>
           <a href="/forgot" style={styles.link}>¿Perdiste tu contraseña?</a>
           <a href="/register" style={styles.link}>¿No tienes cuenta? Regístrate</a>
+           <a href="/contador" style={styles.link}>contador</a>
+           <a href="/mensaje" style={styles.link}>mensaje</a>
+           <a href="/enfoque" style={styles.link}>Enfoque</a>
         </div>
       </div>
 
