@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
+import { auth, googleProvider, signInWithPopup } from "../../Fire";
 
 function LoginPage() {
   const styles = {
@@ -43,6 +45,17 @@ function LoginPage() {
       fontSize: "16px",
       cursor: "pointer",
     },
+    googleButton: {
+      width: "100%",
+      padding: "10px",
+      backgroundColor: "#db4437",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      fontSize: "16px",
+      cursor: "pointer",
+      marginTop: "10px",
+    },
     links: {
       marginTop: "15px",
       fontSize: "12px",
@@ -60,6 +73,28 @@ function LoginPage() {
       cursor: "pointer",
     },
   };
+
+  const handleGoogleLogin = () => {
+  signInWithPopup(auth, googleProvider)
+    .then((result) => {
+      const user = result.user;
+      Swal.fire({
+        title: "¡Bienvenido!",
+        text: `Sesión iniciada con Google: ${user.email}`,
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    })
+    .then(() => {
+      window.location.href = "/dashboard";
+    })
+    .catch((error) => {
+      console.error(error);
+      Swal.fire("Error", "No se pudo iniciar sesión con Google.", "error");
+    });
+};
+
 
   return (
     <div style={styles.page}>
@@ -84,21 +119,20 @@ function LoginPage() {
           </button>
         </form>
 
+        <button style={styles.googleButton} onClick={handleGoogleLogin}>
+          Iniciar con Google
+        </button>
+
         <div style={styles.links}>
           <a href="/forgot" style={styles.link}>¿Perdiste tu contraseña?</a>
           <a href="/register" style={styles.link}>¿No tienes cuenta? Regístrate</a>
-           <a href="/contador" style={styles.link}>contador</a>
-           <a href="/mensaje" style={styles.link}>mensaje</a>
-           <a href="/enfoque" style={styles.link}>Enfoque</a>
         </div>
-      </div>
-
-      <div style={styles.volver}>
-        Volver
       </div>
     </div>
   );
 }
 
 export default LoginPage;
+
+
 
