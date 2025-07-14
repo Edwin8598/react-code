@@ -96,7 +96,7 @@ function Dashboardpage() {
     <div style={styles.page}>
       {/* Navbar estilo clásico */}
       <nav style={styles.navbar}>
-        <div style={styles.logo}>LOGO</div>
+        <div style={styles.logo}>PAGINA</div>
         <div style={styles.navLinks}>
           <a href="#" style={{ ...styles.link, ...styles.activeLink }}>
             Inicio
