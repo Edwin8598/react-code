@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { auth, googleProvider, signInWithPopup } from "../../Fire";
-
+import './LoginPages.css';
 function LoginPage() {
   const styles = {
     page: {
       height: "100vh",
-      backgroundColor: "#fff",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -14,15 +13,18 @@ function LoginPage() {
       fontFamily: "Arial, sans-serif",
       color: "#000",
     },
-    card: {
-      backgroundColor: "#fff",
-      padding: "40px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-      width: "100%",
-      maxWidth: "350px",
-      textAlign: "center",
-    },
+   card: {
+  backgroundColor: "rgba(255, 255, 255, 0.1)", // fondo blanco semi-transparente
+  backdropFilter: "blur(10px)", // efecto de desenfoque tipo "vidrio"
+  WebkitBackdropFilter: "blur(10px)", // para compatibilidad en navegadores WebKit
+  padding: "40px",
+  borderRadius: "10px",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+  width: "100%",
+  maxWidth: "350px",
+  textAlign: "center",
+  border: "1px solid rgba(255,255,255,0.2)", // borde sutil
+},
     title: {
       fontSize: "28px",
       marginBottom: "20px",
@@ -82,7 +84,7 @@ function LoginPage() {
         title: "¡Bienvenido!",
         text: `Sesión iniciada con Google: ${user.email}`,
         icon: "success",
-        timer: 2000,
+        timer: 4000, // ← Aquí el cambio de 2000 a 4000 ms
         showConfirmButton: false,
       });
     })
@@ -94,6 +96,7 @@ function LoginPage() {
       Swal.fire("Error", "No se pudo iniciar sesión con Google.", "error");
     });
 };
+
 
 
   return (
