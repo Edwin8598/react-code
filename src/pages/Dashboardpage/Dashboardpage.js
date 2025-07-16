@@ -4,6 +4,8 @@ import { auth } from "../../Fire";
 import Swal from "sweetalert2";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./DashboardPage.css";
+import { Link } from "react-router-dom";
+
 
 function DashboardPage() {
   const [user] = useAuthState(auth);
@@ -51,26 +53,9 @@ function DashboardPage() {
   const renderView = () => {
     switch (view) {
       case "inicio":
-  return (
-    <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h1 style={{ 
-        fontFamily: "'Georgia', serif", 
-        fontSize: "2.5rem", 
-        color: "#333", 
-        marginBottom: "1rem" 
-      }}>
-        ¡Bienvenido a tu panel de control!
-      </h1>
-      <p style={{
-        fontFamily: "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
-        fontSize: "1.2rem",
-        color: "#555"
-      }}>
-        Aquí puedes gestionar tus tareas, configurar tus preferencias y mucho más.
-      </p>
-    </div>
-  );
-
+        return <div style={{ textAlign: "center", padding: "2rem" }}>
+          
+        </div>;
       case "ajustes":
         return (
           <div>
@@ -80,6 +65,7 @@ function DashboardPage() {
               <li>🔔 Notificaciones</li>
               <li>🌙 Apariencia</li>
               <li>🔒 Seguridad</li>
+              <li>🔒 Usuarios</li>
             </ul>
           </div>
         );
@@ -110,6 +96,9 @@ function DashboardPage() {
           <button className={`link ${view === "inicio" ? "active" : ""}`} onClick={() => setView("inicio")}>Inicio</button>
           <button className={`link ${view === "ajustes" ? "active" : ""}`} onClick={() => setView("ajustes")}>Ajustes</button>
           <button className={`link ${view === "perfil" ? "active" : ""}`} onClick={() => setView("perfil")}>Perfil</button>
+         <Link to="/usuarios" className={`link ${view === "usuarios" ? "active" : ""}`}>
+  Usuarios
+</Link>
           <button className="mode-toggle" onClick={toggleMode}>
             {darkMode ? "Modo Claro" : "Modo Oscuro"}
           </button>

@@ -18,6 +18,7 @@ import NotFoundPage from "./pages/components/NotFoundPage";
 
 // Ruta protegida con Firebase Auth
 import ProtectedRoute from "./pages/components/ProtectedRoute";
+import AuxiliaresPage from "./pages/AuxiliaresPage/AuxiliaresPage"; 
 
 function App() {
   return (
@@ -28,15 +29,12 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot" element={<ForgotPasswordPage />} />
 
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/usuarios" element={<AuxiliaresPage />} /> {/* ← Ruta hacia Auxiliares */}
+
         {/* Ruta protegida */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>}/>
+        <Route path="/auxiliares" element={<ProtectedRoute><AuxiliaresPage /></ProtectedRoute>}/>
 
         {/* Rutas de práctica de hooks */}
         <Route path="/usestate" element={<UseStatePlay />} />
