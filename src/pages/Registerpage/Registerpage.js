@@ -1,126 +1,140 @@
-import React from "react";
+import { useState } from 'react';
+import Swal from 'sweetalert2';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../../Fire';
+import { doc, setDoc } from 'firebase/firestore';
+import './Registerpage.css'; // 👉 Importa el CSS
 
-function RegisterPage() {
-  const styles = {
-    page: {
-      minHeight: "100vh",
-      backgroundColor: "#fff",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "flex-start",
-      paddingTop: "50px",
-      fontFamily: "Arial, sans-serif",
-      color: "#000",
-    },
-    card: {
-      backgroundColor: "#fff",
-      padding: "30px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-      width: "100%",
-      maxWidth: "500px",
-    },
-    title: {
-      fontSize: "26px",
-      textAlign: "center",
-      marginBottom: "25px",
-    },
-    label: {
-      display: "block",
-      marginBottom: "6px",
-      fontWeight: "bold",
-      fontSize: "14px",
-    },
-    input: {
-      width: "100%",
-      padding: "10px",
-      marginBottom: "15px",
-      border: "1px solid #000",
-      borderRadius: "5px",
-      fontSize: "14px",
-    },
-    select: {
-      width: "100%",
-      padding: "10px",
-      marginBottom: "15px",
-      border: "1px solid #000",
-      borderRadius: "5px",
-      fontSize: "14px",
-      backgroundColor: "#fff",
-    },
-    buttonRow: {
-      display: "flex",
-      justifyContent: "space-between",
-      marginTop: "20px",
-    },
-    button: {
-      padding: "10px 20px",
-      border: "none",
-      borderRadius: "5px",
-      cursor: "pointer",
-      fontSize: "14px",
-    },
-    submitBtn: {
-      backgroundColor: "#000",
-      color: "#fff",
-    },
-    backBtn: {
-      backgroundColor: "#444",
-      color: "#fff",
-    },
-    helperText: {
-      fontSize: "12px",
-      marginTop: "-10px",
-      marginBottom: "15px",
-      color: "#333",
-    },
+function Registerpage() {
+  const [formData, setFormData] = useState({
+    cedula: '',
+    nombres: '',
+    apellidos: '',
+    fechaNacimiento: '',
+    sexo: '',
+    telefono: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    for (const key in formData) {
+      if (formData[key] === '') {
+        Swal.fire("Campos incompletos", "Por favor llena todos los campos.", "warning");
+        return;
+      }
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      Swal.fire("Correo inválido", "Escribe un correo válido.", "error");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      Swal.fire("Contraseña", "Las contraseñas no coinciden.", "error");
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, 'usuarios', user.uid), {
+        cedula: formData.cedula,
+        nombres: formData.nombres,
+        apellidos: formData.apellidos,
+        fechaNacimiento: formData.fechaNacimiento,
+        sexo: formData.sexo,
+        telefono: formData.telefono,
+        email: formData.email,
+        estado: 'pendiente'
+      });
+
+      Swal.fire("¡Registro exitoso!", "Usuario registrado correctamente.", "success").then(() => {
+        window.location.href = "/";
+      });
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        Swal.fire("Error", "Este correo ya está registrado.", "error");
+      } else {
+        console.error(error);
+        Swal.fire("Error", "No se pudo registrar el usuario.", "error");
+      }
+    }
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Registro de Usuario</h1>
-        <form>
-          <label htmlFor="nombre" style={styles.label}>Nombre</label>
-          <input type="text" id="nombre" style={styles.input} required />
+    <div className="bg-gradient">
+      <div className="form-card">
+        <h3 className="text-center">Registro de Usuario</h3>
+        <form onSubmit={handleSubmit}>
 
-          <label htmlFor="apellido" style={styles.label}>Apellido</label>
-          <input type="text" id="apellido" style={styles.input} required />
+          <div className="form-group">
+            <label className="form-label">Nombres</label>
+            <input type="text" className="form-control" name="nombres" value={formData.nombres} onChange={handleChange} placeholder="Tus nombres" />
+          </div>
 
-          <label htmlFor="fecha" style={styles.label}>Fecha de Nacimiento</label>
-          <input type="date" id="fecha" style={styles.input} required />
+          <div className="form-group">
+            <label className="form-label">Apellidos</label>
+            <input type="text" className="form-control" name="apellidos" value={formData.apellidos} onChange={handleChange} placeholder="Tus apellidos" />
+          </div>
 
-          <label htmlFor="password" style={styles.label}>Contraseña</label>
-          <input type="password" id="password" style={styles.input} required />
-          <div style={styles.helperText}>Debe tener entre 8 y 20 caracteres.</div>
+          <div className="form-group">
+            <label className="form-label">Cédula</label>
+            <input type="text" className="form-control" name="cedula" value={formData.cedula} onChange={handleChange} placeholder="Tu cédula" />
+          </div>
 
-          <label htmlFor="repeatPassword" style={styles.label}>Repita la Contraseña</label>
-          <input type="password" id="repeatPassword" style={styles.input} required />
+          <div className="form-group">
+            <label className="form-label">Fecha de Nacimiento</label>
+            <input type="date" className="form-control" name="fechaNacimiento" value={formData.fechaNacimiento} onChange={handleChange} />
+          </div>
 
-          <label htmlFor="email" style={styles.label}>Correo</label>
-          <input type="email" id="email" style={styles.input} required />
+          <div className="form-group">
+            <label className="form-label">Teléfono</label>
+            <input type="tel" className="form-control" name="telefono" value={formData.telefono} onChange={handleChange} placeholder="Ej: 3001234567" />
+          </div>
 
-          <label htmlFor="telefono" style={styles.label}>Teléfono</label>
-          <input type="tel" id="telefono" style={styles.input} required />
+          <div className="form-group">
+            <label className="form-label">Sexo</label>
+            <div className="radio-group">
+              <div className="form-check">
+                <input className="form-check-input" type="radio" name="sexo" value="Masculino" checked={formData.sexo === 'Masculino'} onChange={handleChange} />
+                <label className="form-check-label">Masculino</label>
+              </div>
+              <div className="form-check">
+                <input className="form-check-input" type="radio" name="sexo" value="Femenino" checked={formData.sexo === 'Femenino'} onChange={handleChange} />
+                <label className="form-check-label">Femenino</label>
+              </div>
+            </div>
+          </div>
 
-          <label htmlFor="sexo" style={styles.label}>Sexo</label>
-          <select id="sexo" style={styles.select} required>
-            <option value="">Seleccione el Sexo</option>
-            <option value="masculino">Masculino</option>
-            <option value="femenino">Femenino</option>
-            <option value="otro">Otro</option>
-          </select>
+          <div className="form-group">
+            <label className="form-label">Correo Electrónico</label>
+            <input type="email" className="form-control" name="email" value={formData.email} onChange={handleChange} placeholder="tucorreo@ejemplo.com" />
+          </div>
 
-          <label htmlFor="nacionalidad" style={styles.label}>Nacionalidad</label>
-          <input type="text" id="nacionalidad" style={styles.input} required />
+          <div className="form-group">
+            <label className="form-label">Contraseña</label>
+            <input type="password" className="form-control" name="password" value={formData.password} onChange={handleChange} placeholder="Escribe tu contraseña" />
+          </div>
 
-          <div style={styles.buttonRow}>
-            <button type="submit" style={{ ...styles.button, ...styles.submitBtn }}>
-              Enviar
-            </button>
-            <a href="/" style={{ ...styles.button, ...styles.backBtn, textDecoration: "none", textAlign: "center", lineHeight: "28px" }}>
-              Volver
-            </a>
+          <div className="form-group">
+            <label className="form-label">Repetir Contraseña</label>
+            <input type="password" className="form-control" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirma tu contraseña" />
+          </div>
+
+          <div className="d-grid">
+            <button type="submit" className="btn btn-primary">Registrar</button>
+            <a href="/" className="btn btn-outline-secondary">Volver al inicio</a>
           </div>
         </form>
       </div>
@@ -128,4 +142,5 @@ function RegisterPage() {
   );
 }
 
-export default RegisterPage;
+export default Registerpage;
+

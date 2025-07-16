@@ -1,10 +1,11 @@
 // src/Fire.js
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // ⚠️ Reemplaza con tus datos reales de Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyCehVIP30axLA9L_oIYuXkSPeInX3yAPc4",
+ apiKey: "AIzaSyCehVIP30axLA9L_oIYuXkSPeInX3yAPc4",
   authDomain: "proyecto-react-5cda9.firebaseapp.com",
   projectId: "proyecto-react-5cda9",
   storageBucket: "proyecto-react-5cda9.firebasestorage.app",
@@ -12,9 +13,14 @@ const firebaseConfig = {
   appId: "1:581118755881:web:76ad5c75000e34ffc40838"
 };
 
-const app = initializeApp(firebaseConfig)
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+
+// Servicios
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+const db = getFirestore(app);
 
-export { auth, googleProvider, signInWithPopup };
+// Exports consolidados
+export { auth, googleProvider, signInWithPopup, signOut, db };
 

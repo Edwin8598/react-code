@@ -1,7 +1,7 @@
 // src/App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { initializeApp } from "firebase/app"; 
+/*import { initializeApp } from "firebase/app";*/
 // Páginas principales
 import LoginPage from "./pages/LoginPages/LoginPages";
 import RegisterPage from "./pages/Registerpage/Registerpage";

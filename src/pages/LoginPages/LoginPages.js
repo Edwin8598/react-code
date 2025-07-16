@@ -1,134 +1,135 @@
-import React, { useState } from "react";
-import Swal from "sweetalert2";
-import { auth, googleProvider, signInWithPopup } from "../../Fire";
-import './LoginPages.css';
+import { useState } from 'react';
+import Swal from 'sweetalert2';
+import { auth, googleProvider, db } from '../../Fire';
+import {
+  signInWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+  linkWithCredential,
+  EmailAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import './LoginPages.css'; // 👉 CSS externo
+
 function LoginPage() {
-  const styles = {
-    page: {
-      height: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      flexDirection: "column",
-      fontFamily: "Arial, sans-serif",
-      color: "#000",
-    },
-   card: {
-  backgroundColor: "rgba(255, 255, 255, 0.1)", // fondo blanco semi-transparente
-  backdropFilter: "blur(10px)", // efecto de desenfoque tipo "vidrio"
-  WebkitBackdropFilter: "blur(10px)", // para compatibilidad en navegadores WebKit
-  padding: "40px",
-  borderRadius: "10px",
-  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-  width: "100%",
-  maxWidth: "350px",
-  textAlign: "center",
-  border: "1px solid rgba(255,255,255,0.2)", // borde sutil
-},
-    title: {
-      fontSize: "28px",
-      marginBottom: "20px",
-    },
-    input: {
-      width: "100%",
-      padding: "10px",
-      marginBottom: "15px",
-      border: "1px solid #000",
-      borderRadius: "5px",
-      fontSize: "14px",
-    },
-    button: {
-      width: "100%",
-      padding: "10px",
-      backgroundColor: "#000",
-      color: "#fff",
-      border: "none",
-      borderRadius: "5px",
-      fontSize: "16px",
-      cursor: "pointer",
-    },
-    googleButton: {
-      width: "100%",
-      padding: "10px",
-      backgroundColor: "#db4437",
-      color: "#fff",
-      border: "none",
-      borderRadius: "5px",
-      fontSize: "16px",
-      cursor: "pointer",
-      marginTop: "10px",
-    },
-    links: {
-      marginTop: "15px",
-      fontSize: "12px",
-    },
-    link: {
-      display: "block",
-      color: "#000",
-      textDecoration: "none",
-      marginTop: "5px",
-    },
-    volver: {
-      marginTop: "15px",
-      fontSize: "12px",
-      textDecoration: "underline",
-      cursor: "pointer",
-    },
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      Swal.fire("Campos vacíos", "Por favor llena todos los campos.", "warning");
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userDocRef = doc(db, 'usuarios', user.uid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (userSnap.exists() && userSnap.data().estado === "Inactivo") {
+        Swal.fire("Acceso denegado", "Tu cuenta está inactiva. Contacta al administrador.", "error");
+        return;
+      }
+
+      Swal.fire({
+        title: "¡Bienvenido!",
+        text: `Sesión iniciada como ${user.email}`,
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
+      }).then(() => {
+        window.location.href = "/dashboard";
+      });
+
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "Credenciales incorrectas o usuario no existe.", "error");
+    }
   };
 
-  const handleGoogleLogin = () => {
-  signInWithPopup(auth, googleProvider)
-    .then((result) => {
-      const user = result.user;
+  const handleGoogleLogin = async () => {
+    try {
+      const googleResult = await signInWithPopup(auth, googleProvider);
+      const user = googleResult.user;
+
+      const signInMethods = await fetchSignInMethodsForEmail(auth, user.email);
+      if (signInMethods.includes('password')) {
+        const password = await solicitarPassword();
+        if (!password) {
+          Swal.fire("Cancelado", "Operación cancelada.", "info");
+          return;
+        }
+
+        const credential = EmailAuthProvider.credential(user.email, password);
+        await linkWithCredential(user, credential);
+      }
+
       Swal.fire({
         title: "¡Bienvenido!",
         text: `Sesión iniciada con Google: ${user.email}`,
         icon: "success",
-        timer: 6000, // ← Aquí el cambio de 2000 a 4000 ms
-        showConfirmButton: false,
+        timer: 2000,
+        showConfirmButton: false
+      }).then(() => {
+        window.location.href = "/dashboard";
       });
-    })
-    .then(() => {
-      window.location.href = "/dashboard";
-    })
-    .catch((error) => {
+
+    } catch (error) {
       console.error(error);
       Swal.fire("Error", "No se pudo iniciar sesión con Google.", "error");
+    }
+  };
+
+  const solicitarPassword = async () => {
+    const result = await Swal.fire({
+      title: "Contraseña requerida",
+      input: "password",
+      inputLabel: "Introduce tu contraseña para vincular cuentas",
+      inputPlaceholder: "Tu contraseña",
+      showCancelButton: true,
+      confirmButtonText: "Vincular",
+      cancelButtonText: "Cancelar"
     });
-};
 
-
+    return result.isConfirmed && result.value ? result.value : null;
+  };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
-        <div style={styles.title}>Bienvenido</div>
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-title">Bienvenido</div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Usuario"
+            placeholder="Email"
+            className="login-input"
+            onChange={(e) => setEmail(e.target.value)}
             required
-            style={styles.input}
           />
           <input
             type="password"
             placeholder="Contraseña"
+            className="login-input"
+            onChange={(e) => setPassword(e.target.value)}
             required
-            style={styles.input}
           />
-          <button type="submit" style={styles.button}>
+          <button type="submit" className="login-button">
             Login
           </button>
         </form>
 
-        <button style={styles.googleButton} onClick={handleGoogleLogin}>
+        <button className="google-button" onClick={handleGoogleLogin}>
           Iniciar con Google
         </button>
 
-        <div style={styles.links}>
-          <a href="/forgot" style={styles.link}>¿Perdiste tu contraseña?</a>
-          <a href="/register" style={styles.link}>¿No tienes cuenta? Regístrate</a>
+        <div className="login-links">
+          <a href="/forgot" className="login-link">¿Perdiste tu contraseña?</a>
+          <a href="/register" className="login-link">¿No tienes cuenta? Regístrate</a>
         </div>
       </div>
     </div>
@@ -136,6 +137,7 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
 
 
 
