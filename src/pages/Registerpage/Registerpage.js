@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../Fire';
 import { doc, setDoc } from 'firebase/firestore';
-import './Registerpage.css'; // 👉 Importa el CSS
+import './Registerpage.css';
 
 function Registerpage() {
   const [formData, setFormData] = useState({
@@ -17,6 +17,9 @@ function Registerpage() {
     password: '',
     confirmPassword: '',
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -124,12 +127,56 @@ function Registerpage() {
 
           <div className="form-group">
             <label className="form-label">Contraseña</label>
-            <input type="password" className="form-control" name="password" value={formData.password} onChange={handleChange} placeholder="Escribe tu contraseña" />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Escribe tu contraseña"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  marginLeft: "8px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "1.2rem"
+                }}
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
           </div>
 
           <div className="form-group">
             <label className="form-label">Repetir Contraseña</label>
-            <input type="password" className="form-control" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirma tu contraseña" />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                className="form-control"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirma tu contraseña"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={{
+                  marginLeft: "8px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "1.2rem"
+                }}
+              >
+                {showConfirmPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
           </div>
 
           <div className="d-grid">
@@ -143,4 +190,5 @@ function Registerpage() {
 }
 
 export default Registerpage;
+
 
