@@ -84,7 +84,7 @@ function LoginPage() {
         title: "¡Bienvenido!",
         text: `Sesión iniciada con Google: ${user.email}`,
         icon: "success",
-        timer: 4000, // ← Aquí el cambio de 2000 a 4000 ms
+        timer: 6000, // ← Aquí el cambio de 2000 a 4000 ms
         showConfirmButton: false,
       });
     })

@@ -1,0 +1,71 @@
+.dashboard-page {
+  height: 100vh;
+  background-color: #ede7f6;
+  font-family: 'Georgia', serif;
+  position: relative;
+}
+
+.navbar {
+  background-color: #8ee5f0ff;
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.link.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.logout-btn {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.box {
+  background-color: #aeb8c6;
+  padding: 40px 60px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.title {
+  font-size: 32px;
+  color: #333333;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
