@@ -3,9 +3,8 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../Fire";
 import Swal from "sweetalert2";
 import { useAuthState } from "react-firebase-hooks/auth";
-import "./DashboardPage.css";
 import { Link } from "react-router-dom";
-
+import "./DashboardPage.css";
 
 function DashboardPage() {
   const [user] = useAuthState(auth);
@@ -46,16 +45,19 @@ function DashboardPage() {
     }
   };
 
-  const toggleMode = () => {
-    setDarkMode(!darkMode);
-  };
+  const toggleMode = () => setDarkMode(!darkMode);
 
   const renderView = () => {
     switch (view) {
       case "inicio":
-        return <div style={{ textAlign: "center", padding: "2rem" }}>
-          
-        </div>;
+        return (
+          <div className={`inicio-container ${darkMode ? "inicio-dark" : ""}`}>
+            <h1 className="inicio-titulo">¡Bienvenido a la Página!</h1>
+            <p className="inicio-texto">
+              Nos alegra tenerte aquí. Explora y disfruta de todas las funciones disponibles.
+            </p>
+          </div>
+        );
       case "ajustes":
         return (
           <div>
@@ -91,30 +93,30 @@ function DashboardPage() {
   return (
     <div className={`dashboard-page ${darkMode ? "dark" : ""}`}>
       <nav className="navbar">
-        <div className="logo">PÁGINA</div>
-        <div className="nav-links">
-          <button className={`link ${view === "inicio" ? "active" : ""}`} onClick={() => setView("inicio")}>Inicio</button>
-          <button className={`link ${view === "ajustes" ? "active" : ""}`} onClick={() => setView("ajustes")}>Ajustes</button>
-          <button className={`link ${view === "perfil" ? "active" : ""}`} onClick={() => setView("perfil")}>Perfil</button>
-         <Link to="/usuarios" className={`link ${view === "usuarios" ? "active" : ""}`}>
-  Usuarios
-</Link>
-          <button className="mode-toggle" onClick={toggleMode}>
-            {darkMode ? "Modo Claro" : "Modo Oscuro"}
-          </button>
+        <div className="navbar-left">
+          <div className="logo">🛒 ICO</div>
+          <input type="text" className="search-bar" placeholder="Buscar productos..." />
         </div>
 
-        {/* Botón redondo y menú desplegable */}
-        <div className="user-menu-container">
-          <button className="user-menu-button" onClick={() => setMenuOpen(!menuOpen)}>
-            ☰
+        <div className="navbar-center">
+          <button className="highlight-button pink">❤️ Favoritos</button>
+          <button className="highlight-button green">🛍️ Mis Compras</button>
+          <button className="highlight-button purple">🚀 Envío Gratis</button>
+        </div>
+
+        <div className="navbar-right">
+          <button className="mode-toggle" onClick={toggleMode}>
+            {darkMode ? "☀️ Claro" : "🌙 Oscuro"}
           </button>
+          <button className="highlight-button white" onClick={() => setView("inicio")}>🏠 Inicio</button>
+          <button className="highlight-button white" onClick={() => setView("ajustes")}>⚙️ Ajustes</button>
+          <button className="highlight-button white" onClick={() => setView("perfil")}>👤 Perfil</button>
+          <Link to="/usuarios" className="highlight-button white">👥 Usuarios</Link>
+          <button className="user-menu-button" onClick={() => setMenuOpen(!menuOpen)}>☰</button>
           {menuOpen && (
             <div className="user-dropdown">
               <span>{user?.email}</span>
-              <button className="logout-dropdown" onClick={handleLogout}>
-                Cerrar sesión
-              </button>
+              <button className="logout-dropdown" onClick={handleLogout}>Cerrar sesión</button>
             </div>
           )}
         </div>
@@ -128,6 +130,7 @@ function DashboardPage() {
 }
 
 export default DashboardPage;
+
 
 
 

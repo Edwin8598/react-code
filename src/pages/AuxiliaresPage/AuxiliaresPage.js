@@ -14,6 +14,12 @@ function AuxiliaresPage() {
     const [auxiliares, setAuxiliares] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedAux, setSelectedAux] = useState(null);
+    const [darkMode, setDarkMode] = useState(false);
+    const toggleMode = () => {
+    setDarkMode(!darkMode);
+    document.body.classList.toggle("dark-mode", !darkMode);
+};
+
 
     useEffect(() => {
         const fetchAuxiliares = async () => {
@@ -31,6 +37,7 @@ function AuxiliaresPage() {
         await signOut(auth);
         navigate('/');
     };
+    
 
     const handleEliminar = async (id) => {
         const result = await Swal.fire({
@@ -97,6 +104,7 @@ function AuxiliaresPage() {
     const user = auth.currentUser;
 
     return (
+        
         <>
             {/* NAVBAR */}
             <Navbar expand="lg" bg="dark" variant="dark" className="dashboard-navbar">
@@ -111,7 +119,7 @@ function AuxiliaresPage() {
                             <Nav.Link onClick={() => navigate('/auxiliares')}>Auxiliares</Nav.Link>
                             <Nav.Link onClick={() => navigate('/servicios')}>Servicios</Nav.Link>
                             <Nav.Link onClick={() => navigate('/cronograma')}>Cronograma</Nav.Link>
-
+                            
                             <NavDropdown
                                 title={
                                     <>
@@ -120,7 +128,16 @@ function AuxiliaresPage() {
                                         ) : (
                                             <FaUserCircle size={24} color="#fff" />
                                         )}
+                                        <Button
+                                        variant={darkMode ? "light" : "dark"}
+                                        size="sm"
+                                        className="ms-3 mode-toggle"
+                                        onClick={toggleMode}>
+                                        {darkMode ? "Modo Claro" : "Modo Oscuro"}
+                                        </Button>
+
                                     </>
+                                    
                                 }
                                 id="user-nav-dropdown"
                                 align="end"
@@ -178,6 +195,7 @@ function AuxiliaresPage() {
                                             >
                                                 <FaEdit />
                                             </Button>
+                                            
                                             <Button
                                                 variant="danger"
                                                 size="sm"

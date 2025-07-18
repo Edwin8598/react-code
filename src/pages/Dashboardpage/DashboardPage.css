@@ -1,3 +1,4 @@
+/* ==================== GENERAL ==================== */
 .dashboard-page {
   height: 100vh;
   background-color: #f5f5f5;
@@ -10,8 +11,9 @@
   background-color: #121212;
 }
 
+/* ==================== NAVBAR ==================== */
 .navbar {
-  background-color: #1e2a38;
+  background-color: #28e060;
   padding: 12px 40px;
   display: flex;
   justify-content: space-between;
@@ -30,14 +32,20 @@
   gap: 16px;
 }
 
-.link {
+.link,
+button.link {
+  background: none;
+  border: none;
   color: #ffffff;
   text-decoration: none;
   font-weight: 400;
+  font-size: 14px;
+  cursor: pointer;
   transition: color 0.3s;
 }
 
-.link:hover {
+.link:hover,
+button.link:hover {
   color: #f0c330;
 }
 
@@ -46,6 +54,21 @@
   text-decoration: underline;
 }
 
+/* ==================== MODO OSCURO ==================== */
+.dashboard-page.dark .box {
+  background-color: #1f1f1f;
+  color: #fff;
+}
+
+.dashboard-page.dark .title {
+  color: #f0c330;
+}
+
+.dashboard-page.dark .profile-info p {
+  color: #ddd;
+}
+
+/* ==================== BOTONES ==================== */
 .logout-btn {
   background-color: #c0392b;
   color: #fff;
@@ -80,12 +103,7 @@
   background-color: #2980b9;
 }
 
-.user-email {
-  font-size: 12px;
-  color: #ccc;
-  margin-right: 10px;
-}
-
+/* ==================== CAJA DE CONTENIDO ==================== */
 .box {
   background-color: #e3e3e3;
   padding: 40px 60px;
@@ -100,11 +118,7 @@
   transition: background-color 0.3s ease;
 }
 
-.dashboard-page.dark .box {
-  background-color: #1f1f1f;
-  color: #fff;
-}
-
+/* ==================== TÍTULOS Y PERFIL ==================== */
 .title {
   font-size: 32px;
   color: #1e2a38;
@@ -112,31 +126,12 @@
   letter-spacing: 2px;
 }
 
-.dashboard-page.dark .title {
-  color: #f0c330;
-}
-button.link {
-  background: none;
-  border: none;
-  color: #fff;
-  font-weight: 400;
-  cursor: pointer;
-  font-size: 14px;
-  transition: color 0.3s;
-}
-
-button.link:hover {
-  color: #f0c330;
-}
-
 .profile-info p {
   font-size: 14px;
   color: #333;
 }
 
-.dashboard-page.dark .profile-info p {
-  color: #ddd;
-}
+/* ==================== MENÚ DE USUARIO ==================== */
 .user-menu-container {
   position: absolute;
   top: 10px;
@@ -184,4 +179,50 @@ button.link:hover {
 .logout-dropdown:hover {
   background-color: #c0392b;
 }
+
+/* ==================== VISTA INICIO ==================== */
+.inicio-container {
+  text-align: center;
+  padding: 2rem;
+  background-color: #fdfdfd;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.inicio-titulo {
+  font-family: 'Segoe UI', 'Lucida Handwriting', cursive;
+  font-size: 2.5rem;
+  font-style: italic;
+  color: #080808;
+  margin-bottom: 1rem;
+}
+
+.inicio-texto {
+  font-family: 'Georgia', serif;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Modo oscuro para inicio */
+.inicio-dark {
+  background-color: #1e1e1e;
+}
+
+.inicio-dark .inicio-titulo {
+  color: #dcdcff;
+}
+
+.inicio-dark .inicio-texto {
+  color: #cccccc;
+}
+/* Modo oscuro para inicio adaptado al diseño */
+.inicio-dark {
+  background-color: #1e1e1e;
+}
+
+.inicio-dark .inicio-titulo,
+.inicio-dark .inicio-texto {
+  color: #f0c330;
+}
+
 
